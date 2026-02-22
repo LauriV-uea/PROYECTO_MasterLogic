@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Registro de Cliente</h2>
+<form method="POST">
+    <label>Nombre:</label><input type="text" name="nombre"><br>
+    <label>Teléfono:</label><input type="text" name="telefono"><br>
+    <label>Dirección:</label><input type="text" name="direccion"><br>
+    <label>Correo:</label><input type="email" name="correo"><br>
+    <label>DNI:</label><input type="text" name="dni"><br>
+    <button type="submit">Registrar</button>
+</form>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Solicitud de Asistencia Técnica</h2>
+<form method="POST">
+    <label>ID Servicio:</label><input type="text" name="servicio_id"><br>
+    <label>Fecha:</label><input type="date" name="fecha"><br>
+    <label>Tipo de Servicio:</label><input type="text" name="tipo"><br>
+    <label>Estado:</label><input type="text" name="estado"><br>
+    <label>Técnico:</label><input type="text" name="tecnico"><br>
+    <label>Especialidad:</label><input type="text" name="especialidad"><br>
+    <button type="submit">Registrar</button>
+</form>
+{% endblock %}
