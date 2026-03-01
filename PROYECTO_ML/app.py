@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect
 from inventario import Inventario
 from models import Producto
 from database import conectar, crear_tabla
-
+import os
 crear_tabla()
 inventario = Inventario()
 
@@ -127,4 +127,6 @@ def actualizar_producto():
     return redirect("/inventario")
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+
+
