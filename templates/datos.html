@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<style>
+.data-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:18px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 6px 16px rgba(0,0,0,0.06);
+}
+.data-table th, .data-table td{
+    padding:10px;
+    text-align:left;
+    border-bottom:1px solid var(--border);
+}
+.data-table thead{
+    background:#f1f5f9;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    font-size:12px;
+    color:#52606d;
+}
+.data-table tbody tr:hover{
+    background:#f8fbff;
+}
+</style>
+
+<div class="card-surface" aria-label="Resumen de datos">
+    <h2>Datos TXT</h2>
+    <table class="data-table" aria-label="Datos TXT">
+        <thead>
+            <tr><th>Nombre</th><th>Cantidad</th><th>Precio</th></tr>
+        </thead>
+        <tbody>
+            {% for d in txt_items %}
+            <tr><td>{{ d.nombre }}</td><td>{{ d.cantidad }}</td><td>{{ d.precio }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Datos JSON</h2>
+    <table class="data-table" aria-label="Datos JSON">
+        <thead><tr><th>Nombre</th><th>Cantidad</th><th>Precio</th></tr></thead>
+        <tbody>
+            {% for d in json %}
+            <tr><td>{{ d.nombre }}</td><td>{{ d.cantidad }}</td><td>{{ d.precio }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Datos CSV</h2>
+    <table class="data-table" aria-label="Datos CSV">
+        <thead><tr><th>Nombre</th><th>Cantidad</th><th>Precio</th></tr></thead>
+        <tbody>
+            {% for d in csv_items %}
+            <tr><td>{{ d.nombre }}</td><td>{{ d.cantidad }}</td><td>{{ d.precio }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Repuestos</h2>
+    <table class="data-table" aria-label="Repuestos">
+        <thead><tr><th>ID</th><th>Nombre</th><th>Precio</th></tr></thead>
+        <tbody>
+            {% for r in repuestos %}
+            <tr><td>{{ r['id'] }}</td><td>{{ r['nombre'] }}</td><td>{{ r['precio'] }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Facturas</h2>
+    <table class="data-table" aria-label="Facturas">
+        <thead><tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Total</th></tr></thead>
+        <tbody>
+            {% for f in facturas %}
+            <tr><td>{{ f['id'] }}</td><td>{{ f['cliente'] or 'N/A' }}</td><td>{{ f['fecha'] }}</td><td>{{ f['total'] }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

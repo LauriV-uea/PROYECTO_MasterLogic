@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<style>
+.print-btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:#fff;cursor:pointer;}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:10px 0;}
+.info-card{padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2);}
+@media print {
+    header, nav, .no-print { display: none !important; }
+    body { margin: 12mm; }
+}
+</style>
+
+<div class="card-surface" aria-label="Historial del cliente">
+    <div style="text-align:center;margin-bottom:10px;">
+        <div style="display:inline-block;padding:8px 14px;border-radius:12px;border:1px solid var(--border);background:#fff;box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+            <span style="font-size:20px;font-weight:800;color:var(--accent);letter-spacing:0.4px;">MasterLogic</span>
+        </div>
+    </div>
+    <div class="flex-between">
+        <div>
+            <h2 class="section-title">Historial de {{ cliente['nombre'] }} {{ cliente.get('apellidos','') }}</h2>
+            <p class="muted">Resumen de compras, repuestos y servicios en MasterLogic.</p>
+        </div>
+        <div class="no-print" style="display:flex;gap:8px;align-items:center;">
+            <button class="print-btn" onclick="window.print()">Imprimir</button>
+            <a class="print-btn" href="{{ url_for('cliente_historial_pdf', cliente_id=cliente['id']) }}" class="btn btn-danger">Descargar PDF</a>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        {% if cliente.get('dni') %}<div class="info-card"><span class="stat-label">DNI</span><div class="stat-value">{{ cliente['dni'] }}</div></div>{% endif %}
+        {% if cliente.get('correo') %}<div class="info-card"><span class="stat-label">Correo</span><div class="stat-value">{{ cliente['correo'] }}</div></div>{% endif %}
+        {% if cliente.get('telefono') %}<div class="info-card"><span class="stat-label">Telefono</span><div class="stat-value">{{ cliente['telefono'] }}</div></div>{% endif %}
+        {% if cliente.get('direccion') %}<div class="info-card"><span class="stat-label">Direccion</span><div class="stat-value">{{ cliente['direccion'] }}</div></div>{% endif %}
+    </div>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total productos</div>
+            <div class="stat-value">{{ productos|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total repuestos</div>
+            <div class="stat-value">{{ repuestos|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total servicios</div>
+            <div class="stat-value">{{ servicios|length }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Subtotal cliente</div>
+            <div class="stat-value">${{ '%.2f'|format(subtotal) }}</div>
+        </div>
+    </div>
+
+    <h3 class="mt-3">Productos asociados</h3>
+    <table class="table-grid" aria-label="Productos del cliente">
+        <thead><tr><th>ID</th><th>Nombre</th><th>Cantidad</th><th>Precio</th></tr></thead>
+        <tbody>
+        {% for p in productos %}
+        <tr>
+            <td>{{ p['id'] }}</td>
+            <td>{{ p['nombre'] }}</td>
+            <td>{{ p['cantidad'] }}</td>
+            <td>{{ p['precio'] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="muted">Sin productos registrados.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 class="mt-3">Repuestos</h3>
+    <table class="table-grid" aria-label="Repuestos del cliente">
+        <thead><tr><th>ID</th><th>Nombre</th><th>Cantidad</th><th>Precio</th></tr></thead>
+        <tbody>
+        {% for r in repuestos %}
+        <tr>
+            <td>{{ r['id'] }}</td>
+            <td>{{ r['nombre'] }}</td>
+            <td>{{ r['cantidad'] }}</td>
+            <td>{{ r['precio'] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="muted">Sin repuestos registrados.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 class="mt-3">Servicios solicitados</h3>
+    <table class="table-grid" aria-label="Servicios del cliente">
+        <thead><tr><th>ID</th><th>DescripciÃ³n</th><th>Costo</th><th>Fecha</th><th>Estado</th></tr></thead>
+        <tbody>
+        {% for s in servicios %}
+        <tr>
+            <td>{{ s['id'] }}</td>
+            <td>{{ s['descripcion'] }}</td>
+            <td>{{ s['costo'] }}</td>
+            <td>{{ s['fecha_solicitud'] or '' }}</td>
+            <td>
+                {% if s['estado'] == 'Activo' %}
+                    <span class="pill pill-success">Activo</span>
+                {% else %}
+                    <span class="pill pill-info">{{ s['estado'] }}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="muted">Sin servicios registrados.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<style>
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;}
+.field{display:flex;flex-direction:column;}
+.field label{font-weight:600;margin-bottom:4px;}
+.field input,.field select{padding:9px 10px;border:1px solid var(--border);border-radius:8px;}
+.table-grid{
+    width:100%;border-collapse:collapse;border:1px solid var(--border);background:var(--surface);
+    border-radius:12px;overflow:hidden;box-shadow:0 8px 18px rgba(0,0,0,0.08);
+    margin-top:14px;
+}
+.table-grid th,.table-grid td{padding:10px;border-bottom:1px solid var(--border);text-align:left;}
+.table-grid thead{background:#f1f5f9;font-size:12px;letter-spacing:0.02em;text-transform:uppercase;color:#52606d;}
+</style>
+
+<div class="card-surface" aria-label="Gestión de facturas">
+    <h2>Facturas</h2>
+
+    <form method="POST" class="form-grid" aria-label="Formulario de facturas">
+        <div class="field">
+            <label for="id_cliente">Cliente</label>
+            <select name="id_cliente" id="id_cliente" required>
+                <option value="">Seleccionar cliente</option>
+                {% for c in clientes %}
+                <option value="{{ c['id'] }}">{{ c['nombre'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha" required>
+        </div>
+        <div class="field">
+            <label>Total</label>
+            <input type="text" value="Se calcula automáticamente" readonly style="opacity:0.75;">
+            <small>Se suman productos + repuestos + servicios del cliente seleccionado.</small>
+        </div>
+        <div class="field" style="align-self:end;">
+            <button type="submit" class="btn-secondary">Guardar Factura</button>
+        </div>
+    </form>
+
+    <h3>Listado de Facturas</h3>
+    <table class="table-grid" aria-label="Tabla de facturas">
+        <tr>
+            <th>ID</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th><th>Historial</th>
+        </tr>
+        {% for f in facturas %}
+        <tr>
+            <td>{{ f['id'] }}</td>
+            <td>{{ f.get('cliente') or 'N/A' }}</td>
+            <td>{{ f['fecha'] }}</td>
+            <td>{{ f['total'] }}</td>
+            <td>{{ f.get('estado') or '-' }}</td>
+            <td>
+                {% if f.get('id_cliente') %}
+                <a href="{{ url_for('cliente_historial', cliente_id=f['id_cliente']) }}">Ver</a>
+                {% else %}-{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

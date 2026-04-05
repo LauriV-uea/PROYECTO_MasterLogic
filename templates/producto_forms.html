@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+{% set p = producto if producto else {} %}
+<h2>{{ 'Editar producto' if producto else 'Nuevo producto' }}</h2>
+<form method="POST" action="{% if producto %}{{ url_for('producto_editar', id=producto['id']) }}{% else %}{{ url_for('producto_form') }}{% endif %}" style="max-width:500px;">
+    <div style="margin-bottom:12px;">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" value="{{ p['nombre'] if p else '' }}" required style="width:100%; padding:8px;" />
+    </div>
+    <div style="margin-bottom:12px;">
+        <label for="cantidad">Cantidad:</label><br>
+        <input type="number" id="cantidad" name="cantidad" value="{{ p.get('cantidad','') }}" min="0" style="width:100%; padding:8px;" />
+    </div>
+    <div style="margin-bottom:12px;">
+        <label for="precio">Precio:</label><br>
+        <input type="number" id="precio" name="precio" value="{{ p['precio'] if p else '' }}" step="0.01" min="0" style="width:100%; padding:8px;" />
+    </div>
+    <div style="margin-bottom:12px;">
+        <label for="id_cliente">Cliente:</label><br>
+        <select id="id_cliente" name="id_cliente" style="width:100%; padding:8px;">
+            <option value="">- Ninguno -</option>
+            {% for c in clientes %}
+            <option value="{{ c.id }}" {% if p and p.get('id_cliente') == c.id %}selected{% endif %}>
+                {{ c.nombre }}{% if c.apellidos %} {{ c.apellidos }}{% endif %} {% if c.dni %}({{ c.dni }}){% endif %}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" style="padding:8px 12px; background:#007bff; color:white; border:none; border-radius:4px;">Guardar cambios</button>
+    <a href="{{ url_for('productos') }}" style="margin-left:12px;">Cancelar</a>
+</form>
+
+{% endblock %}

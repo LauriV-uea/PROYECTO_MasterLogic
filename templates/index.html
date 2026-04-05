@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<style>
+.hero {
+    background:#f5f7fa;
+    border:1px solid #e3e7ee;
+    border-radius:10px;
+    padding:24px;
+    margin-bottom:24px;
+}
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:16px;
+}
+.card {
+    position:relative;
+    border-radius:12px;
+    padding:14px;
+    color:#0a1f33;
+    text-decoration:none;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    transition:transform .15s ease, box-shadow .15s ease;
+    overflow:hidden;
+    background:#ffffff;
+}
+.card:hover { transform:translateY(-4px); box-shadow:0 8px 18px rgba(0,0,0,0.14); }
+.card img {
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-bottom:12px;
+}
+.card h3 { margin:0 0 8px 0; }
+.tag { display:inline-block; padding:2px 8px; background:#0d6efd; color:#fff; border-radius:999px; font-size:12px; }
+.icon { position:absolute; top:12px; right:12px; font-size:22px; }
+</style>
+
+<div class="hero">
+    <h2>Bienvenido a MasterLogic</h2>
+    <p>Empresa dedicada a brindar soluciones técnicas y soporte especializado para clientes y negocios.</p>
+</div>
+
+<div class="grid">
+    <a class="card" href="{{ url_for('productos', q='computadora') }}">
+        <span class="icon">💻</span>
+        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="Computadoras">
+        <h3>Computadoras</h3>
+        <div class="tag">Productos</div>
+        <p>Equipos, partes y upgrades listos para entregar.</p>
+    </a>
+    <a class="card" href="{{ url_for('productos', q='impresora') }}">
+        <span class="icon">🖨️</span>
+        <img src="https://www.computeach.com.ec/wp-content/uploads/2018/03/L4160-EPSON.jpg" alt="Impresoras">
+        <h3>Impresoras</h3>
+        <div class="tag">Productos</div>
+        <p>Insumos, mantenimiento y reemplazo inmediato.</p>
+    </a>
+    <a class="card" href="{{ url_for('productos', q='parlante') }}">
+        <span class="icon">🔊</span>
+        <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=600&q=80" alt="Parlantes y audio">
+        <h3>Parlantes & Audio</h3>
+        <div class="tag">Productos</div>
+        <p>Sonido para oficinas, eventos y salas de juntas.</p>
+    </a>
+    <a class="card" href="{{ url_for('productos', q='accesorio') }}">
+        <span class="icon">🎧</span>
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Accesorios">
+        <h3>Accesorios</h3>
+        <div class="tag">Productos</div>
+        <p>Teclados, mouses, webcams y más para tu setup.</p>
+    </a>
+    <a class="card" href="{{ url_for('servicios') }}">
+        <span class="icon">🛠️</span>
+        <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=600&q=80" alt="Soporte técnico">
+        <h3>Soporte Técnico</h3>
+        <div class="tag">Servicio</div>
+        <p>Diagnóstico, reparación y mantenimiento preventivo.</p>
+    </a>
+    <a class="card" href="{{ url_for('servicios') }}">
+        <span class="icon">🌐</span>
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80" alt="Redes y CCTV">
+        <h3>Redes & CCTV</h3>
+        <div class="tag">Servicio</div>
+        <p>Instalación y configuración de redes cableadas e inalámbricas.</p>
+    </a>
+</div>
+{% endblock %}

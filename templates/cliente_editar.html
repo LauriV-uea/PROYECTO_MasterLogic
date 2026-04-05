@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<h2>Editar Cliente</h2>
+<form method="POST">
+    <label>Nombre</label>
+    <input type="text" name="nombre" value="{{ cliente['nombre'] }}" required><br>
+
+    <label>Apellidos</label>
+    <input type="text" name="apellidos" value="{{ cliente['apellidos'] or '' }}"><br>
+
+    <label>Correo</label>
+    <input type="email" name="correo" value="{{ cliente['correo'] or '' }}"><br>
+
+    <label>Teléfono</label>
+    <input type="text" name="telefono" value="{{ cliente['telefono'] or '' }}"><br>
+
+    <label>Dirección</label>
+    <input type="text" name="direccion" value="{{ cliente['direccion'] or '' }}"><br>
+
+    <label>DNI</label>
+    <input type="text" name="dni" value="{{ cliente['dni'] or '' }}"><br>
+
+    <button type="submit">Guardar cambios</button>
+    <a href="{{ url_for('clientes') }}" style="margin-left:12px;">Cancelar</a>
+</form>
+{% endblock %}

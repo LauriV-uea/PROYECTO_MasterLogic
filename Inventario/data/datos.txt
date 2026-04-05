@@ -1,0 +1,12 @@
+PC,2,365
+Mouse,3,18
+Pedro,3,18
+Mouse,5,25
+Teclado,3,5.0
+Impresora,1,600.0
+Playstation 5,1,850.0
+Laptop,6,500.0
+Telefono,6,150.0
+Camara,3,60.0
+Celular,2,90.0
+teclado25,10,6.0

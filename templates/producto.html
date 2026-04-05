@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<div class="card-surface" aria-label="Listado de productos">
+  <div class="flex-between">
+    <div>
+      <h2 class="section-title">Productos</h2>
+      <p class="muted">Administra inventario, asigna clientes y controla precios en un mismo panel.</p>
+    </div>
+    <a class="btn btn-primary" href="{{ url_for('producto_form') }}">Agregar Producto</a>
+  </div>
+
+  <form method="GET" action="/productos" class="search-bar" aria-label="Buscar productos">
+      <input type="text" name="q" value="{{ q or '' }}" placeholder="Buscar por nombre o descripciÃ³n" />
+      <button type="submit" class="btn btn-secondary">Buscar</button>
+  </form>
+
+  <table class="table-grid" aria-label="Tabla de productos">
+      <thead>
+          <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Cliente</th>
+              <th>Acciones</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for p in productos %}
+          <tr>
+              <td>{{ p.id }}</td>
+              <td>{{ p.nombre }}</td>
+              <td>{{ p.cantidad }}</td>
+              <td>{{ "%.2f"|format(p.precio) }}</td>
+              <td>{{ p.cliente_nombre or '-' }}</td>
+              <td class="actions">
+                  <a class="btn btn-warning" href="{{ url_for('producto_editar', id=p.id) }}">Editar</a>
+                  <form method="POST" action="{{ url_for('producto_eliminar', id=p.id) }}" style="margin:0;">
+                      <button type="submit" class="btn btn-danger" onclick="return confirm('Â¿Eliminar este producto?');">Eliminar</button>
+                  </form>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+
+  {% if total_productos > per_page %}
+  <div class="flex-between mt-2" aria-label="PaginaciÃ³n">
+      {% if page > 1 %}
+          <a href="{{ url_for('productos', q=q, page=page-1) }}">Â« Anterior</a>
+      {% else %}
+          <span></span>
+      {% endif %}
+
+      <span>PÃ¡gina {{ page }} de {{ (total_productos // per_page) + (1 if total_productos % per_page > 0 else 0) }}</span>
+
+      {% if total_productos > page * per_page %}
+          <a href="{{ url_for('productos', q=q, page=page+1) }}">Siguiente Â»</a>
+      {% endif %}
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}

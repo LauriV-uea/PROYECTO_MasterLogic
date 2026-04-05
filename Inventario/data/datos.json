@@ -1,0 +1,62 @@
+[
+    {
+        "nombre": "PC",
+        "cantidad": "2",
+        "precio": "365"
+    },
+    {
+        "nombre": "Mouse",
+        "cantidad": "3",
+        "precio": "18"
+    },
+    {
+        "nombre": "Pedro",
+        "cantidad": "3",
+        "precio": "18"
+    },
+    {
+        "nombre": "Mouse",
+        "cantidad": "5",
+        "precio": "25"
+    },
+    {
+        "nombre": "Teclado",
+        "cantidad": 3,
+        "precio": 5.0
+    },
+    {
+        "nombre": "Impresora",
+        "cantidad": 1,
+        "precio": 600.0
+    },
+    {
+        "nombre": "Playstation 5",
+        "cantidad": 1,
+        "precio": 850.0
+    },
+    {
+        "nombre": "Laptop",
+        "cantidad": 6,
+        "precio": 500.0
+    },
+    {
+        "nombre": "Telefono",
+        "cantidad": 6,
+        "precio": 150.0
+    },
+    {
+        "nombre": "Camara",
+        "cantidad": 3,
+        "precio": 60.0
+    },
+    {
+        "nombre": "Celular",
+        "cantidad": 2,
+        "precio": 90.0
+    },
+    {
+        "nombre": "teclado25",
+        "cantidad": 10,
+        "precio": 6.0
+    }
+]

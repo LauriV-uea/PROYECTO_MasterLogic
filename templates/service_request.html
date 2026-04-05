@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<style>
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.field{display:flex;flex-direction:column;}
+.field label{font-weight:600;margin-bottom:4px;}
+.field input,.field select{padding:9px 10px;border:1px solid var(--border);border-radius:8px;}
+.table-grid{
+    width:100%;border-collapse:collapse;border:1px solid var(--border);background:var(--surface);
+    border-radius:12px;overflow:hidden;box-shadow:0 8px 18px rgba(0,0,0,0.08);
+    margin-top:14px;
+}
+.table-grid th,.table-grid td{padding:10px;border-bottom:1px solid var(--border);text-align:left;}
+.table-grid thead{background:#f1f5f9;font-size:12px;letter-spacing:0.02em;text-transform:uppercase;color:#52606d;}
+</style>
+
+<div class="card-surface" aria-label="Gestión de servicios">
+    <h2>Solicitud de Asistencia Técnica</h2>
+    <form method="POST" class="form-grid" aria-label="Formulario de servicio">
+        <div class="field">
+            <label for="descripcion">Descripción</label>
+            <input id="descripcion" type="text" name="descripcion" required>
+        </div>
+        <div class="field">
+            <label for="costo">Costo</label>
+            <input id="costo" type="number" step="0.01" name="costo" required>
+        </div>
+        <div class="field">
+            <label for="id_cliente">Cliente</label>
+            <select id="id_cliente" name="id_cliente">
+                <option value="">-- Seleccione Cliente --</option>
+                {% for c in clientes %}
+                <option value="{{ c.id }}">{{ c.nombre }} {{ c.apellidos or '' }} {% if c.dni %}({{ c.dni }}){% endif %}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field">
+            <label for="fecha_solicitud">Fecha de Solicitud</label>
+            <input id="fecha_solicitud" type="date" name="fecha_solicitud">
+        </div>
+        <div class="field">
+            <label for="estado">Estado</label>
+            <select id="estado" name="estado" required>
+                <option value="Activo">Activo</option>
+                <option value="Desactivado">Desactivado</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="tecnico">Técnico</label>
+            <select id="tecnico" name="tecnico" required>
+                <option value="">-- Seleccione técnico --</option>
+                {% for t in tecnicos %}
+                <option value="{{ t }}">{{ t }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="field">
+            <label for="especialidad">Especialidad</label>
+            <select id="especialidad" name="especialidad" required>
+                <option value="Instalación">Instalación</option>
+                <option value="Mantenimiento">Mantenimiento</option>
+                <option value="Reparación">Reparación</option>
+            </select>
+        </div>
+        <div class="field" style="align-self:end;">
+            <button type="submit" class="btn-secondary">Registrar</button>
+        </div>
+    </form>
+
+    <h3 style="margin-top:18px;">Servicios registrados</h3>
+    <table class="table-grid" aria-label="Tabla de servicios">
+        <thead>
+        <tr>
+            <th>ID</th><th>Descripción</th><th>Costo</th><th>Cliente</th><th>DNI</th><th>Correo</th><th>Dirección</th><th>Técnico(s)</th><th>Especialidad</th><th>Fecha Solicitud</th><th>Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for s in servicios %}
+        <tr>
+            <td>{{ s.id }}</td>
+            <td>{{ s.descripcion }}</td>
+            <td>{{ s.costo }}</td>
+            <td>{{ s.cliente_nombre or '-' }} {{ s.cliente_apellidos or '' }}</td>
+            <td>{{ s.cliente_dni or '-' }}</td>
+            <td>{{ s.cliente_correo or '-' }}</td>
+            <td>{{ s.cliente_direccion or '-' }}</td>
+            <td>{{ s.tecnico or '-' }}</td>
+            <td>{{ s.especialidad or '-' }}</td>
+            <td>{{ s.fecha_solicitud or '-' }}</td>
+            <td>{{ s.estado or '-' }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

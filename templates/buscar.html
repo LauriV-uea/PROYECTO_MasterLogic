@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="buscar-container">
+    <h2>Búsqueda de Productos y Clientes</h2>
+    
+    <div class="buscar-form">
+        <form method="GET" action="/buscar" autocomplete="off">
+            <div class="autocomplete-wrapper">
+                <input id="autocomplete-input" type="text" name="q" placeholder="Buscar por palabra..." value="{{ termino }}" required>
+                <button type="submit">Buscar</button>
+            </div>
+            <ul id="autocomplete-list" class="autocomplete-list"></ul>
+        </form>
+    </div>
+
+    {% if termino %}
+        <p class="resultados-info">Se encontraron <strong>{{ total }}</strong> resultado(s) para "<strong>{{ termino }}</strong>"</p>
+        
+        {% if total == 0 %}
+            <div class="sin-resultados">
+                <p>No se encontraron resultados para tu búsqueda.</p>
+            </div>
+        {% endif %}
+
+        <!-- PRODUCTOS -->
+        {% if productos %}
+        <div class="categoria-resultados">
+            <h3>🛒 Productos ({{ productos|length }})</h3>
+            <table class="tabla-resultados">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in productos %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.nombre }}</td>
+                        <td>{{ p.cantidad }}</td>
+                        <td>${{ "%.2f"|format(p.precio) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        <!-- CLIENTES -->
+        {% if clientes %}
+        <div class="categoria-resultados">
+            <h3>👥 Clientes ({{ clientes|length }})</h3>
+            <table class="tabla-resultados">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in clientes %}
+                    <tr>
+                        <td>{{ c.id }}</td>
+                        <td>{{ c.nombre }}</td>
+                        <td>{{ c.correo or '-' }}</td>
+                        <td>{{ c.telefono or '-' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    {% else %}
+        <div class="sin-busqueda">
+            <p>Usa la barra de búsqueda para encontrar productos, clientes, repuestos, técnicos o servicios.</p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+.buscar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.buscar-form {
+    margin: 20px 0;
+}
+
+.buscar-form form {
+    display: flex;
+    gap: 10px;
+}
+
+.buscar-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.buscar-form button {
+    padding: 10px 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.buscar-form button:hover {
+    background-color: #0056b3;
+}
+
+.resultados-info {
+    padding: 15px;
+    background-color: #e8f4f8;
+    border-left: 4px solid #007bff;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.sin-resultados, .sin-busqueda {
+    padding: 40px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    color: #666;
+}
+
+.categoria-resultados {
+    margin-bottom: 40px;
+}
+
+.categoria-resultados h3 {
+    color: #007bff;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+.tabla-resultados {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.tabla-resultados thead {
+    background-color: #007bff;
+    color: white;
+}
+
+.tabla-resultados th,
+.tabla-resultados td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-resultados tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.tabla-resultados tbody tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.btn-ver {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.btn-ver:hover {
+    background-color: #218838;
+}
+</style>
+
+<script>
+const inputAuto = document.getElementById('autocomplete-input');
+const listAuto = document.getElementById('autocomplete-list');
+let timeoutAuto;
+
+inputAuto.addEventListener('input', function() {
+    const q = this.value.trim();
+    clearTimeout(timeoutAuto);
+    listAuto.innerHTML = '';
+
+    if (!q) {
+        return;
+    }
+
+    timeoutAuto = setTimeout(async () => {
+        try {
+            const resp = await fetch(`/autocomplete?q=${encodeURIComponent(q)}`);
+            if (!resp.ok) throw new Error('No se pudo cargar autocomplete');
+            const data = await resp.json();
+
+            listAuto.innerHTML = '';
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = `${item.tipo} - ${item.texto}`;
+                li.addEventListener('click', () => {
+                    inputAuto.value = item.texto;
+                    listAuto.innerHTML = '';
+                });
+                listAuto.appendChild(li);
+            });
+        } catch (err) {
+            console.error('Error autocompletar:', err);
+        }
+    }, 200);
+});
+
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.autocomplete-wrapper')) {
+        listAuto.innerHTML = '';
+    }
+});
+</script>
+{% endblock %}
