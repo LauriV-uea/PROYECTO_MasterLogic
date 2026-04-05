@@ -1,4 +1,4 @@
-from database import get_connection as obtener_conexion
+from ProyectoML.database import get_connection as obtener_conexion
 from productos import obtener_productos, agregar_producto, eliminar_producto, actualizar_producto, Producto
 
 class Inventario:

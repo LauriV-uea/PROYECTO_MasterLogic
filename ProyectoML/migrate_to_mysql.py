@@ -18,7 +18,7 @@ Uso desde PowerShell:
 import sqlite3
 import pymysql
 
-from database import _config, init_db
+from ProyectoML.database import _config, init_db
 
 
 SQLITE_PATH = "masterlogic.db"

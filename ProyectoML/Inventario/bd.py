@@ -1,4 +1,4 @@
-from database import get_connection
+from ProyectoML.database import get_connection
 
 
 def obtener_conexion():

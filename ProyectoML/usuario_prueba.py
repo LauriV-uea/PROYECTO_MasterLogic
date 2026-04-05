@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Script para crear un usuario de prueba
-from database import crear_usuario
+from ProyectoML.database import crear_usuario
 
 # Crear usuario de prueba
 resultado = crear_usuario("admin", "admin@masterlogic.com", "admin123", "Administrador")
